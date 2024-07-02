@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AdminNavbar from "./AdminNavbar";
 import Table from "./Table";
 
 export default function Courses() {
-  const courses = [
-    { name: 'Intro to JavaScript', regNumber: 'Course001' },
-    { name: 'Advanced React', regNumber: 'Course002' },
-  ];
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/courses`); 
+        const data = await response.json();
+        setCourses(data);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
   return (
     <div className="flex h-screen">
       <AdminNavbar />

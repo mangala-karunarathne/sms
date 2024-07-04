@@ -1,12 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AdminNavbar from "./AdminNavbar";
-import Table from "./Table";
+import StudentTable from "./StudentTable";
+import { useSelector } from "react-redux";
 
 export default function Students() {
-  const students = [
-    { name: "John Doe", regNumber: "Student001" },
-    { name: "Jane Smith", regNumber: "Student002" },
-  ];
+  const [students, setStudents] = useState([]);
+
+  const { currentUser } = useSelector((state) => state.user);
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/users`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: currentUser.access_token,
+            },
+          }
+        );
+        const data = await response.json();
+        console.log("C:", data);
+        setStudents(data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
   return (
     <div className="flex h-screen">
       <AdminNavbar />
@@ -14,7 +37,7 @@ export default function Students() {
         <div>
           <h1>Students</h1>
           <div>
-            <Table data={students} />
+            <StudentTable data={students} />
           </div>
         </div>
       </div>

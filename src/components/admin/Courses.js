@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminNavbar from "./AdminNavbar";
-import Table from "./Table";
+import Table from "./CoursesTable";
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
@@ -10,6 +10,7 @@ export default function Courses() {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/courses`); 
         const data = await response.json();
+        console.log("A:",data);
         setCourses(data);
       } catch (error) {
         console.error('Error fetching courses:', error);
